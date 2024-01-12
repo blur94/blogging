@@ -614,6 +614,8 @@ export type Mutation = {
   addPostToSeries: AddPostToSeriesPayload;
   /** Creates a new post. */
   publishPost: PublishPostPayload;
+  /** Removes a post. */
+  removePost: RemovePostPayload;
   /** Reschedule a post. */
   reschedulePost?: Maybe<ScheduledPostPayload>;
   subscribeToNewsletter: SubscribeToNewsletterPayload;
@@ -636,6 +638,11 @@ export type MutationAddPostToSeriesArgs = {
 
 export type MutationPublishPostArgs = {
   input: PublishPostInput;
+};
+
+
+export type MutationRemovePostArgs = {
+  input: RemovePostInput;
 };
 
 
@@ -1447,6 +1454,8 @@ export type PublicationIntegrations = {
   fathomSiteID?: Maybe<Scalars['String']['output']>;
   /** FB Pixel ID for integration with Facebook Pixel. */
   fbPixelID?: Maybe<Scalars['String']['output']>;
+  /** Google Tag Manager ID for integration with Google Tag Manager. */
+  gTagManagerID?: Maybe<Scalars['String']['output']>;
   /** Google Analytics Tracking ID for integration with Google Analytics. */
   gaTrackingID?: Maybe<Scalars['String']['output']>;
   /** Hotjar Site ID for integration with Hotjar. */
@@ -1782,6 +1791,17 @@ export type RedirectionRule = {
   type: HttpRedirectionType;
 };
 
+export type RemovePostInput = {
+  /** The ID of the post to remove. */
+  id: Scalars['ID']['input'];
+};
+
+export type RemovePostPayload = {
+  __typename?: 'RemovePostPayload';
+  /** The deleted post. */
+  post?: Maybe<Post>;
+};
+
 /**
  * Contains basic information about the reply.
  * A reply is a response to a comment.
@@ -1866,6 +1886,7 @@ export enum Scope {
   RemoveComment = 'remove_comment',
   RemoveReply = 'remove_reply',
   Signup = 'signup',
+  TeamHashnode = 'team_hashnode',
   UpdateComment = 'update_comment',
   UpdatePost = 'update_post',
   UpdateReply = 'update_reply',

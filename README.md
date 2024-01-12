@@ -105,7 +105,7 @@ async function handleRequest(request) {
 
   if (url.pathname.startsWith(subpath)) {
     // Proxy blog requests
-    return proxyBlog(request) 
+    return proxyBlog(request)
   } else {
     // Passthrough everything else
     return fetch(request)
@@ -121,7 +121,6 @@ async function proxyBlog(request) {
   return fetch(`${blogBaseUrl}${path}`, request)
 }
 ```
-
 
 Be sure to replace the values of `subpath` and `blogBaseUrl` in the above code snippet. This way cloudflare will proxy all the requests starting with `yourdomain.com/blog` to your headless blog, and other requests will hit your origin as usual.
 

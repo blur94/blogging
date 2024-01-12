@@ -138,9 +138,7 @@ export default function Index(
 					) : null}
 
 					{publication.about?.html ? (
-						<div
-							className="blog-author-container border-b dark:border-slate-800"
-						>
+						<div className="blog-author-container border-b dark:border-slate-800">
 							<div
 								className={twJoin(
 									'blog-author-area feed-width mx-auto md:w-3/4 lg:w-2/3',
