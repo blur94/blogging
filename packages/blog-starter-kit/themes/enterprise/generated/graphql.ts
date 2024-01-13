@@ -17,6 +17,16 @@ export type Scalars = {
   ObjectId: { input: string; output: string; }
 };
 
+export type AddCommentInput = {
+  contentMarkdown: Scalars['String']['input'];
+  postId: Scalars['ID']['input'];
+};
+
+export type AddCommentPayload = {
+  __typename?: 'AddCommentPayload';
+  comment?: Maybe<Comment>;
+};
+
 export type AddPostToSeriesInput = {
   /** The ID of the post to be added to the series. */
   postId: Scalars['ObjectId']['input'];
@@ -28,6 +38,16 @@ export type AddPostToSeriesPayload = {
   __typename?: 'AddPostToSeriesPayload';
   /** The series to which the post was added. */
   series?: Maybe<Series>;
+};
+
+export type AddReplyInput = {
+  commentId: Scalars['ID']['input'];
+  contentMarkdown: Scalars['String']['input'];
+};
+
+export type AddReplyPayload = {
+  __typename?: 'AddReplyPayload';
+  reply?: Maybe<Reply>;
 };
 
 /**
@@ -216,6 +236,18 @@ export type CoverImageOptionsInput = {
   stickCoverToBottom?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type CreateWebhookInput = {
+  events: Array<WebhookEvent>;
+  publicationId: Scalars['ID']['input'];
+  secret: Scalars['String']['input'];
+  url: Scalars['String']['input'];
+};
+
+export type CreateWebhookPayload = {
+  __typename?: 'CreateWebhookPayload';
+  webhook?: Maybe<Webhook>;
+};
+
 export type CustomCss = {
   __typename?: 'CustomCSS';
   /** Custom CSS that will be applied on the publication homepage. */
@@ -249,6 +281,11 @@ export type DarkModePreferences = {
   enabled?: Maybe<Scalars['Boolean']['output']>;
   /** The custom dark mode logo of the publication. */
   logo?: Maybe<Scalars['String']['output']>;
+};
+
+export type DeleteWebhookPayload = {
+  __typename?: 'DeleteWebhookPayload';
+  webhook?: Maybe<Webhook>;
 };
 
 /** Contains the publication's domain information. */
@@ -598,6 +635,26 @@ export type IUserPublicationsArgs = {
   first: Scalars['Int']['input'];
 };
 
+export type LikeCommentInput = {
+  commentId: Scalars['ID']['input'];
+  likesCount?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type LikeCommentPayload = {
+  __typename?: 'LikeCommentPayload';
+  comment?: Maybe<Comment>;
+};
+
+export type LikePostInput = {
+  likesCount?: InputMaybe<Scalars['Int']['input']>;
+  postId: Scalars['ID']['input'];
+};
+
+export type LikePostPayload = {
+  __typename?: 'LikePostPayload';
+  post?: Maybe<Post>;
+};
+
 /** Contains information about meta tags of the post. Used for SEO purpose. */
 export type MetaTagsInput = {
   /** The description of the post used in og:description for SEO. */
@@ -610,14 +667,31 @@ export type MetaTagsInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Adds a comment to a post. */
+  addComment: AddCommentPayload;
   /** Adds a post to a series. */
   addPostToSeries: AddPostToSeriesPayload;
+  /** Adds a reply to a comment. */
+  addReply: AddReplyPayload;
+  createWebhook: CreateWebhookPayload;
+  deleteWebhook: DeleteWebhookPayload;
+  /** Likes a comment. */
+  likeComment: LikeCommentPayload;
+  /** Likes a post. */
+  likePost: LikePostPayload;
   /** Creates a new post. */
   publishPost: PublishPostPayload;
+  recommendPublications: RecommendPublicationsPayload;
+  /** Removes a comment from a post. */
+  removeComment: RemoveCommentPayload;
   /** Removes a post. */
   removePost: RemovePostPayload;
+  removeRecommendation: RemoveRecommendationPayload;
+  /** Removes a reply from a comment. */
+  removeReply: RemoveReplyPayload;
   /** Reschedule a post. */
   reschedulePost?: Maybe<ScheduledPostPayload>;
+  resendWebhookRequest: ResendWebhookRequestPayload;
   subscribeToNewsletter: SubscribeToNewsletterPayload;
   /**
    * Update the follow state for the user that is provided via id or username.
@@ -626,8 +700,19 @@ export type Mutation = {
    * Only available to the authenticated user.
    */
   toggleFollowUser: ToggleFollowUserPayload;
+  triggerWebhookTest: TriggerWebhookTestPayload;
   unsubscribeFromNewsletter: UnsubscribeFromNewsletterPayload;
+  /** Updates a comment on a post. */
+  updateComment: UpdateCommentPayload;
   updatePost: UpdatePostPayload;
+  /** Updates a reply */
+  updateReply: UpdateReplyPayload;
+  updateWebhook: UpdateWebhookPayload;
+};
+
+
+export type MutationAddCommentArgs = {
+  input: AddCommentInput;
 };
 
 
@@ -636,8 +721,43 @@ export type MutationAddPostToSeriesArgs = {
 };
 
 
+export type MutationAddReplyArgs = {
+  input: AddReplyInput;
+};
+
+
+export type MutationCreateWebhookArgs = {
+  input: CreateWebhookInput;
+};
+
+
+export type MutationDeleteWebhookArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationLikeCommentArgs = {
+  input: LikeCommentInput;
+};
+
+
+export type MutationLikePostArgs = {
+  input: LikePostInput;
+};
+
+
 export type MutationPublishPostArgs = {
   input: PublishPostInput;
+};
+
+
+export type MutationRecommendPublicationsArgs = {
+  input: RecommendPublicationsInput;
+};
+
+
+export type MutationRemoveCommentArgs = {
+  input: RemoveCommentInput;
 };
 
 
@@ -646,8 +766,23 @@ export type MutationRemovePostArgs = {
 };
 
 
+export type MutationRemoveRecommendationArgs = {
+  input: RemoveRecommendationInput;
+};
+
+
+export type MutationRemoveReplyArgs = {
+  input: RemoveReplyInput;
+};
+
+
 export type MutationReschedulePostArgs = {
   input: ReschedulePostInput;
+};
+
+
+export type MutationResendWebhookRequestArgs = {
+  input: ResendWebhookRequestInput;
 };
 
 
@@ -662,13 +797,33 @@ export type MutationToggleFollowUserArgs = {
 };
 
 
+export type MutationTriggerWebhookTestArgs = {
+  input: TriggerWebhookTestInput;
+};
+
+
 export type MutationUnsubscribeFromNewsletterArgs = {
   input: UnsubscribeFromNewsletterInput;
 };
 
 
+export type MutationUpdateCommentArgs = {
+  input: UpdateCommentInput;
+};
+
+
 export type MutationUpdatePostArgs = {
   input: UpdatePostInput;
+};
+
+
+export type MutationUpdateReplyArgs = {
+  input: UpdateReplyInput;
+};
+
+
+export type MutationUpdateWebhookArgs = {
+  input: UpdateWebhookInput;
 };
 
 /**
@@ -1772,6 +1927,16 @@ export type ReadTimeFeature = Feature & {
   isEnabled: Scalars['Boolean']['output'];
 };
 
+export type RecommendPublicationsInput = {
+  recommendedPublicationIds: Array<Scalars['ID']['input']>;
+  recommendingPublicationId: Scalars['ID']['input'];
+};
+
+export type RecommendPublicationsPayload = {
+  __typename?: 'RecommendPublicationsPayload';
+  recommendedPublications?: Maybe<Array<UserRecommendedPublicationEdge>>;
+};
+
 /** Contains a publication and a cursor for pagination. */
 export type RecommendedPublicationEdge = Edge & {
   __typename?: 'RecommendedPublicationEdge';
@@ -1791,6 +1956,15 @@ export type RedirectionRule = {
   type: HttpRedirectionType;
 };
 
+export type RemoveCommentInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type RemoveCommentPayload = {
+  __typename?: 'RemoveCommentPayload';
+  comment?: Maybe<Comment>;
+};
+
 export type RemovePostInput = {
   /** The ID of the post to remove. */
   id: Scalars['ID']['input'];
@@ -1800,6 +1974,26 @@ export type RemovePostPayload = {
   __typename?: 'RemovePostPayload';
   /** The deleted post. */
   post?: Maybe<Post>;
+};
+
+export type RemoveRecommendationInput = {
+  recommendedPublicationId: Scalars['ID']['input'];
+  recommendingPublicationId: Scalars['ID']['input'];
+};
+
+export type RemoveRecommendationPayload = {
+  __typename?: 'RemoveRecommendationPayload';
+  recommendedPublication: Publication;
+};
+
+export type RemoveReplyInput = {
+  commentId: Scalars['ID']['input'];
+  replyId: Scalars['ID']['input'];
+};
+
+export type RemoveReplyPayload = {
+  __typename?: 'RemoveReplyPayload';
+  reply?: Maybe<Reply>;
 };
 
 /**
@@ -1832,6 +2026,16 @@ export type ReschedulePostInput = {
   draftId: Scalars['ObjectId']['input'];
   /** New scheduled date for the post to be rescheduled. */
   scheduledDate: Scalars['DateTime']['input'];
+};
+
+export type ResendWebhookRequestInput = {
+  webhookId: Scalars['ID']['input'];
+  webhookMessageId: Scalars['ID']['input'];
+};
+
+export type ResendWebhookRequestPayload = {
+  __typename?: 'ResendWebhookRequestPayload';
+  webhookMessage?: Maybe<WebhookMessage>;
 };
 
 /** Information to help in seo related meta tags. */
@@ -2180,6 +2384,15 @@ export type ToggleFollowUserPayload = {
   user?: Maybe<User>;
 };
 
+export type TriggerWebhookTestInput = {
+  webhookId: Scalars['ID']['input'];
+};
+
+export type TriggerWebhookTestPayload = {
+  __typename?: 'TriggerWebhookTestPayload';
+  webhook?: Maybe<Webhook>;
+};
+
 export type UnsubscribeFromNewsletterInput = {
   /** The email that is currently subscribed. */
   email: Scalars['String']['input'];
@@ -2190,6 +2403,16 @@ export type UnsubscribeFromNewsletterInput = {
 export type UnsubscribeFromNewsletterPayload = {
   __typename?: 'UnsubscribeFromNewsletterPayload';
   status?: Maybe<NewsletterUnsubscribeStatus>;
+};
+
+export type UpdateCommentInput = {
+  contentMarkdown: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+};
+
+export type UpdateCommentPayload = {
+  __typename?: 'UpdateCommentPayload';
+  comment?: Maybe<Comment>;
 };
 
 export type UpdatePostInput = {
@@ -2248,6 +2471,29 @@ export type UpdatePostSettingsInput = {
   isTableOfContentEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Pin the post to the blog homepage. */
   pinToBlog?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type UpdateReplyInput = {
+  commentId: Scalars['ID']['input'];
+  contentMarkdown: Scalars['String']['input'];
+  replyId: Scalars['ID']['input'];
+};
+
+export type UpdateReplyPayload = {
+  __typename?: 'UpdateReplyPayload';
+  reply?: Maybe<Reply>;
+};
+
+export type UpdateWebhookInput = {
+  events?: InputMaybe<Array<WebhookEvent>>;
+  id: Scalars['ID']['input'];
+  secret?: InputMaybe<Scalars['String']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateWebhookPayload = {
+  __typename?: 'UpdateWebhookPayload';
+  webhook?: Maybe<Webhook>;
 };
 
 export enum UrlPattern {
