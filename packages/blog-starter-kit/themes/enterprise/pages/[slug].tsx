@@ -89,11 +89,13 @@ const Post = (publication: PublicationFragment, post: PostFullFragment) => {
 		// TODO:
 		// More of an alert, did this below to wrap async funcs inside useEffect
 		(async () => {
+			if (!post.publication) return;
+
 			await loadIframeResizer();
-			triggerCustomWidgetEmbed(post.publication?.id.toString());
+			triggerCustomWidgetEmbed(post.publication.id.toString());
 			setCanLoadEmbeds(true);
 		})();
-	}, []);
+	}, [post]);
 
 	return (
 		<>
